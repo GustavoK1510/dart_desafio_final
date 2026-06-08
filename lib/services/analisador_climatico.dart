@@ -21,7 +21,7 @@ class AnalisadorClimatico {
     return registros.where((registro) => registro.estado == estado && registro.mes == mes).toList();
   }
 
-  double MediaTemperaturaPorEstado(String estado) {
+  double mediaTemperaturaPorEstado(String estado) {
     final List<RegistroClimatico> registrosEstado = filtrarPorEstado(estado);
     if (registrosEstado.isEmpty) {
       return 0.0;
@@ -30,7 +30,7 @@ class AnalisadorClimatico {
     return somaTemperaturas / registrosEstado.length;
   }
 
-  double MediaTemperaturaPorEstadoEMes(String estado, int mes) {
+  double mediaTemperaturaPorEstadoEMes(String estado, int mes) {
     final List<RegistroClimatico> registrosEstadoMes = filtrarPorEstadoEMes(estado, mes);
     if (registrosEstadoMes.isEmpty) {
       return 0.0;
@@ -39,7 +39,7 @@ class AnalisadorClimatico {
     return somaTemperaturas / registrosEstadoMes.length;
   }
 
-  double MediaUmidadePorEstado(String estado) {
+  double mediaUmidadePorEstado(String estado) {
     final List<RegistroClimatico> registrosEstado = filtrarPorEstado(estado);
     if (registrosEstado.isEmpty) {
       return 0.0;
@@ -48,7 +48,7 @@ class AnalisadorClimatico {
     return somaUmidades / registrosEstado.length;
   }
 
-  double MediaUmidadePorEstadoEMes(String estado, int mes) {
+  double mediaUmidadePorEstadoEMes(String estado, int mes) {
     final List<RegistroClimatico> registrosEstadoMes = filtrarPorEstadoEMes(estado, mes);
     if (registrosEstadoMes.isEmpty) {
       return 0.0;
@@ -57,7 +57,7 @@ class AnalisadorClimatico {
     return somaUmidades / registrosEstadoMes.length;
   }
 
-  double TemperaturaMaximaPorEstado(String estado) {
+  double mediaTemperaturaMaximaPorEstado(String estado) {
     final List<RegistroClimatico> registrosEstado = filtrarPorEstado(estado);
     if (registrosEstado.isEmpty) {
       return 0.0;
@@ -65,7 +65,7 @@ class AnalisadorClimatico {
     return registrosEstado.map((registro) => registro.temperatura).reduce((a, b) => a > b ? a : b);
   }
 
-  double TemperaturaMinimaPorEstado(String estado) {
+  double mediaTemperaturaMinimaPorEstado(String estado) {
     final List<RegistroClimatico> registrosEstado = filtrarPorEstado(estado);
     if (registrosEstado.isEmpty) {
       return 0.0;
@@ -73,7 +73,7 @@ class AnalisadorClimatico {
     return registrosEstado.map((registro) => registro.temperatura).reduce((a, b) => a < b ? a : b);
   }
 
-  double UmidadeMaximaPorEstado(String estado) {
+  double mediaUmidadeMaximaPorEstado(String estado) {
     final List<RegistroClimatico> registrosEstado = filtrarPorEstado(estado);
     if (registrosEstado.isEmpty) {
       return 0.0;
@@ -81,7 +81,7 @@ class AnalisadorClimatico {
     return registrosEstado.map((registro) => registro.umidade).reduce((a, b) => a > b ? a : b);
   }
 
-  double UmidadeMinimaPorEstado(String estado) {
+  double mediaUmidadeMinimaPorEstado(String estado) {
     final List<RegistroClimatico> registrosEstado = filtrarPorEstado(estado);
     if (registrosEstado.isEmpty) {
       return 0.0;
@@ -89,6 +89,19 @@ class AnalisadorClimatico {
     return registrosEstado.map((registro) => registro.umidade).reduce((a, b) => a < b ? a : b);
   }
 
-  
+  Map<String, double> mediaTemperaturaPorHorarioPorEstado(String estado) {
+    final registrosEstado = filtrarPorEstado(estado);
+    final Map<String, List<double>> temperaturasPorHorario = {};
+    for (final registro in registrosEstado) {
+      temperaturasPorHorario.putIfAbsent(registro.hora, () => []).add(registro.temperatura);
+    }
+
+    Map<String, double> medias = {};
+    temperaturasPorHorario.forEach((hora, temperaturas) {
+      final double somaTemperaturas = temperaturas.fold(0.0, (soma, temp) => soma + temp);
+      medias[hora] = somaTemperaturas / temperaturas.length;
+    });
+    return medias;
+  }
 
 }
