@@ -1,6 +1,7 @@
 import 'package:clima/services/leitor_CSV.dart';
 import 'package:clima/models/registro_climatico.dart';
 import 'package:clima/services/analisador_climatico.dart';
+import 'package:clima/services/relatorios.dart';
 import 'dart:io';
 
 void main() {
@@ -18,11 +19,8 @@ void main() {
     }
 
     final AnalisadorClimatico analisador = AnalisadorClimatico(todosRegistros);
-
-    final double media = analisador.mediaTemperaturaPorEstadoEMes('SC', 1);
-
-    print('Média de temperatura para SC em janeiro: ${media.toStringAsFixed(2)}°C');
-  } else {
-    print('Diretório não encontrado.');
+    final Relatorios relatorios = Relatorios(analisador);
+    final String relatorioTemperatura = relatorios.gerarRelatorioTemperatura();
+    print(relatorioTemperatura);
   }
 }
