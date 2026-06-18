@@ -1,5 +1,6 @@
 import 'package:clima/ui/menu.dart';
+import 'dart:io';
 
-void main() {
-  menu();
+Future<void> main() async {
+  await menu();
 }
